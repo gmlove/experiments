@@ -75,14 +75,6 @@ def p_type_expression(p):
     print('type_expression: {}'.format(p.slice))
 
 
-def p_value_expression(p):
-    """
-    value_expression : 
-                     | NAME '[' multi_type_expression ']'
-    """
-    print('type_expression: {}'.format(p.slice))
-
-
 def p_error(p):
     raise Exception("Syntax error at '%s'" % p.value)
 
