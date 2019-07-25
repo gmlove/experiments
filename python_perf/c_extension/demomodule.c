@@ -39,14 +39,26 @@ demo_system_allow_thread(PyObject *self, PyObject *args)
     return ret;
 }
 
+
+static PyObject *
+demo_pure_heavy_calculation(PyObject *self, PyObject *args)
+{
+    long a = 0;
+    for (int i = 0; i < 10000000; i++) {
+        a += pow(2, 10);
+    }
+    return PyLong_FromLong(a);
+}
+
+
 static PyObject *
 demo_heavy_calculation(PyObject *self, PyObject *args)
 {
     fprintf(stdout, "testing log in c, start heavy calculation from\n");
     fflush(stdout);
-    int a = 0;
+    long a = 0;
     for (int i = 0; i < 10000000; i++) {
-        a += 1;
+        a += pow(2, 10);
         if (i > 0 && i % 2000000 == 0) {
             fprintf(stdout, "calculating a: %d\n", a);
             fflush(stdout);
@@ -74,6 +86,7 @@ static PyMethodDef DemoMethods[] = {
     {"system_allow_thread",  demo_system_allow_thread, METH_VARARGS, "Execute a shell command with allow thread."},
     {"heavy_calculation",  demo_heavy_calculation, METH_VARARGS, "Execute some heavy calculation."},
     {"heavy_calculation_allow_thread",  demo_heavy_calculation_allow_thread, METH_VARARGS, "Execute some heavy calculation with allow thread."},
+    {"pure_heavy_calculation",  demo_pure_heavy_calculation, METH_VARARGS, "Execute some pure heavy calculation."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 

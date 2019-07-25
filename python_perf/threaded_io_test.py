@@ -7,15 +7,29 @@ class DatasetTest(unittest.TestCase):
 
     @log_time
     def test_perf_of_threaded_io(self):
+        import math
+        import pyximport
+        pyximport.install()
+        from python_perf.cython_extension import demo as cython_demo
+        from python_perf.c_extension import demo as c_demo
 
-        @log_time
+        @log_time  # 2.04s
         def heavy_calculation():
-            import math
             a = 0
+            pow = math.pow
             for i in range(10000000):
-                a += math.pow(2, 10)
+                a += pow(2, 10)
+            return a
 
-        @log_time
+        @log_time  # 0.028s
+        def heavy_calculation_in_c():
+            c_demo.pure_heavy_calculation()
+
+        @log_time  # 0.01s
+        def heavy_calculation_in_cython():
+            cython_demo.heavy_calculation()
+
+        @log_time  # 0.5s
         def heavy_io():
             open(r'some-600M-file', 'rb').read()
 
@@ -36,3 +50,7 @@ class DatasetTest(unittest.TestCase):
 
         exec_in_single_thread()
         exec_in_multi_thread()
+
+        heavy_calculation()
+        heavy_calculation_in_c()
+        heavy_calculation_in_cython()
