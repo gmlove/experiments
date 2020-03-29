@@ -8,7 +8,7 @@ c-build-win:
 	cd out_c && \
 	cl /LD ../src_c/mul.cc && \
 	cl /LD ../src_c/double.cc /link mul.lib && \
-	cl /LD ../src_c/main.c /link double.lib && \
+	cl ../src_c/main.c /link double.lib
 
 c-build-mac:
 	cd out_c && \
